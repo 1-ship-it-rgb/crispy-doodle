@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mint Ivory Clock Widget</title>
+  <style>
+    :root {
+      --mint-1: #dff5ee;
+      --mint-2: #bfe8dc;
+      --mint-3: #8fd2c0;
+      --mint-4: #5db7a1;
+      --mint-5: #3f8f7d;
+      --ivory-1: #fffdf7;
+      --ivory-2: #f7f3e8;
+      --ivory-3: #ece5d6;
+      --text-1: #355f57;
+      --text-2: #6d8a83;
+      --shadow: 0 10px 30px rgba(78, 133, 120, 0.14);
+      --radius-xl: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family:
+        "Pretendard",
+        "Apple SD Gothic Neo",
+        "Noto Sans KR",
+        sans-serif;
+      background: transparent;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .widget {
+      width: 100%;
+      max-width: 420px;
+      min-height: 220px;
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.9), transparent 35%),
+        linear-gradient(145deg, var(--ivory-1), var(--mint-1));
+      border: 1px solid rgba(93, 183, 161, 0.18);
+      box-shadow: var(--shadow);
+      padding: 24px 24px 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .widget::before,
+    .widget::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(143, 210, 192, 0.18);
+      filter: blur(8px);
+    }
+
+    .widget::before {
+      width: 140px;
+      height: 140px;
+      top: -50px;
+      right: -30px;
+    }
+
+    .widget::after {
+      width: 90px;
+      height: 90px;
+      bottom: -25px;
+      left: -25px;
+      background: rgba(255, 250, 235, 0.7);
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(255, 253, 247, 0.75);
+      border: 1px solid rgba(93, 183, 161, 0.18);
+      border-radius: 999px;
+      color: var(--text-2);
+      font-size: 13px;
+      backdrop-filter: blur(6px);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--mint-4);
+      box-shadow: 0 0 0 4px rgba(93, 183, 161, 0.12);
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      margin-top: 22px;
+    }
+
+    .date {
+      font-size: 18px;
+      color: var(--text-2);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .time {
+      font-size: clamp(42px, 10vw, 64px);
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      color: var(--text-1);
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .seconds {
+      font-size: 20px;
+      color: var(--mint-5);
+      font-weight: 700;
+      opacity: 0.9;
+    }
+
+    .bottom-row {
+      position: relative;
+      z-index: 1;
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .timezone,
+    .message {
+      padding: 10px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.45);
+      border: 1px solid rgba(93, 183, 161, 0.12);
+      color: var(--text-2);
+      font-size: 13px;
+    }
+
+    .message {
+      color: var(--mint-5);
+      font-weight: 600;
+    }
+
+    @media (max-width: 480px) {
+      .widget {
+        padding: 20px 20px 18px;
+        min-height: 200px;
+      }
+
+      .date {
+        font-size: 16px;
+      }
+
+      .seconds {
+        font-size: 18px;
+      }
+
+      .bottom-row {
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="widget">
+    <div class="top-row">
+      <div class="badge">
+        <span class="dot"></span>
+        <span>Today Widget</span>
+      </div>
+      <div class="badge" id="ampm">AM</div>
+    </div>
+
+    <div class="content">
+      <div class="date" id="date">2026년 3월 20일 금요일</div>
+      <div class="time">
+        <span id="time">09:41</span>
+        <span class="seconds" id="seconds">08</span>
+      </div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="timezone" id="timezone">Asia/Seoul</div>
+      <div class="message" id="message">좋은 하루 보내요 ✿</div>
+    </div>
+  </section>
+
+  <script>
+    const dateEl = document.getElementById("date");
+    const timeEl = document.getElementById("time");
+    const secondsEl = document.getElementById("seconds");
+    const ampmEl = document.getElementById("ampm");
+    const timezoneEl = document.getElementById("timezone");
+    const messageEl = document.getElementById("message");
+
+    const messages = [
+      "좋은 하루 보내요 ✿",
+      "천천히, 예쁘게 기록해요",
+      "오늘도 차분하게 시작",
+      "작은 할 일부터 하나씩",
+      "민트처럼 산뜻한 하루"
+    ];
+
+    function pad(n) {
+      return String(n).padStart(2, "0");
+    }
+
+    function getGreeting(hour) {
+      if (hour < 6) return "조용한 새벽이에요";
+      if (hour < 12) return "상쾌한 아침이에요";
+      if (hour < 18) return "포근한 오후예요";
+      if (hour < 22) return "편안한 저녁이에요";
+      return "오늘도 수고했어요";
+    }
+
+    function updateClock() {
+      const now = new Date();
+
+      const dateFormatter = new Intl.DateTimeFormat("ko-KR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long"
+      });
+
+      const hour = now.getHours();
+      const minute = now.getMinutes();
+      const second = now.getSeconds();
+
+      dateEl.textContent = dateFormatter.format(now);
+      timeEl.textContent = `${pad(hour)}:${pad(minute)}`;
+      secondsEl.textContent = pad(second);
+      ampmEl.textContent = hour < 12 ? "AM" : "PM";
+
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Local Time";
+      timezoneEl.textContent = tz;
+
+      const index = Math.floor(now.getMinutes() / 12) % messages.length;
+      messageEl.textContent = `${getGreeting(hour)} · ${messages[index]}`;
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
