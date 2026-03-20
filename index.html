@@ -3,21 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mint Ivory Clock Widget</title>
+  <title>Minimal Mint Clock Widget</title>
   <style>
     :root {
-      --mint-1: #dff5ee;
-      --mint-2: #bfe8dc;
-      --mint-3: #8fd2c0;
-      --mint-4: #5db7a1;
-      --mint-5: #3f8f7d;
-      --ivory-1: #fffdf7;
-      --ivory-2: #f7f3e8;
-      --ivory-3: #ece5d6;
-      --text-1: #355f57;
-      --text-2: #6d8a83;
-      --shadow: 0 10px 30px rgba(78, 133, 120, 0.14);
-      --radius-xl: 28px;
+      --mint-1: #e6f7f1;
+      --mint-2: #cfeee4;
+      --mint-3: #8fcfbd;
+      --mint-4: #5ea894;
+      --ivory-1: #fffdf8;
+      --ivory-2: #f8f4ea;
+      --text-1: #355e56;
+      --text-2: #6f8b84;
+      --line: rgba(94, 168, 148, 0.16);
+      --shadow: 0 12px 32px rgba(73, 126, 114, 0.12);
+      --radius: 28px;
     }
 
     * {
@@ -28,190 +27,142 @@
       margin: 0;
       width: 100%;
       height: 100%;
+      background: transparent;
       font-family:
         "Pretendard",
         "Apple SD Gothic Neo",
         "Noto Sans KR",
         sans-serif;
-      background: transparent;
     }
 
     body {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 18px;
+      padding: 16px;
     }
 
     .widget {
       width: 100%;
-      max-width: 420px;
-      min-height: 220px;
-      border-radius: var(--radius-xl);
-      background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.9), transparent 35%),
-        linear-gradient(145deg, var(--ivory-1), var(--mint-1));
-      border: 1px solid rgba(93, 183, 161, 0.18);
-      box-shadow: var(--shadow);
-      padding: 24px 24px 22px;
+      max-width: 400px;
+      min-height: 190px;
       position: relative;
       overflow: hidden;
-    }
-
-    .widget::before,
-    .widget::after {
-      content: "";
-      position: absolute;
-      border-radius: 999px;
-      background: rgba(143, 210, 192, 0.18);
-      filter: blur(8px);
+      border-radius: var(--radius);
+      padding: 22px 22px 20px;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,0.9), transparent 32%),
+        linear-gradient(145deg, var(--ivory-1), var(--mint-1));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
     }
 
     .widget::before {
-      width: 140px;
-      height: 140px;
-      top: -50px;
+      content: "";
+      position: absolute;
+      width: 120px;
+      height: 120px;
       right: -30px;
+      top: -35px;
+      border-radius: 999px;
+      background: rgba(143, 207, 189, 0.14);
+      filter: blur(6px);
     }
 
-    .widget::after {
-      width: 90px;
-      height: 90px;
-      bottom: -25px;
-      left: -25px;
-      background: rgba(255, 250, 235, 0.7);
-    }
-
-    .top-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+    .top {
       position: relative;
       z-index: 1;
-    }
-
-    .badge {
-      display: inline-flex;
+      display: flex;
+      justify-content: flex-end;
       align-items: center;
       gap: 8px;
-      padding: 8px 12px;
-      background: rgba(255, 253, 247, 0.75);
-      border: 1px solid rgba(93, 183, 161, 0.18);
-      border-radius: 999px;
-      color: var(--text-2);
-      font-size: 13px;
-      backdrop-filter: blur(6px);
+      margin-bottom: 20px;
     }
 
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--mint-4);
-      box-shadow: 0 0 0 4px rgba(93, 183, 161, 0.12);
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--line);
+      color: var(--text-2);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      backdrop-filter: blur(6px);
+      white-space: nowrap;
     }
 
     .content {
       position: relative;
       z-index: 1;
-      margin-top: 22px;
     }
 
     .date {
-      font-size: 18px;
-      color: var(--text-2);
+      font-size: 16px;
       font-weight: 600;
+      color: var(--text-2);
       letter-spacing: -0.02em;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
-    .time {
-      font-size: clamp(42px, 10vw, 64px);
-      line-height: 1;
-      font-weight: 800;
-      letter-spacing: -0.05em;
-      color: var(--text-1);
+    .time-wrap {
       display: flex;
       align-items: baseline;
       gap: 10px;
       flex-wrap: wrap;
     }
 
+    .time {
+      font-size: clamp(44px, 11vw, 68px);
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -0.06em;
+      color: var(--text-1);
+    }
+
     .seconds {
-      font-size: 20px;
-      color: var(--mint-5);
+      font-size: 18px;
       font-weight: 700;
+      color: var(--mint-4);
       opacity: 0.9;
-    }
-
-    .bottom-row {
-      position: relative;
-      z-index: 1;
-      margin-top: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .timezone,
-    .message {
-      padding: 10px 14px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.45);
-      border: 1px solid rgba(93, 183, 161, 0.12);
-      color: var(--text-2);
-      font-size: 13px;
-    }
-
-    .message {
-      color: var(--mint-5);
-      font-weight: 600;
     }
 
     @media (max-width: 480px) {
       .widget {
-        padding: 20px 20px 18px;
-        min-height: 200px;
+        min-height: 175px;
+        padding: 20px 18px 18px;
+      }
+
+      .top {
+        margin-bottom: 18px;
       }
 
       .date {
-        font-size: 16px;
+        font-size: 15px;
       }
 
       .seconds {
-        font-size: 18px;
-      }
-
-      .bottom-row {
-        gap: 10px;
+        font-size: 16px;
       }
     }
   </style>
 </head>
 <body>
   <section class="widget">
-    <div class="top-row">
-      <div class="badge">
-        <span class="dot"></span>
-        <span>Today Widget</span>
-      </div>
-      <div class="badge" id="ampm">AM</div>
+    <div class="top">
+      <div class="chip" id="timezone">Asia/Seoul</div>
+      <div class="chip" id="ampm">AM</div>
     </div>
 
     <div class="content">
       <div class="date" id="date">2026년 3월 20일 금요일</div>
-      <div class="time">
-        <span id="time">09:41</span>
-        <span class="seconds" id="seconds">08</span>
+      <div class="time-wrap">
+        <div class="time" id="time">09:41</div>
+        <div class="seconds" id="seconds">08</div>
       </div>
-    </div>
-
-    <div class="bottom-row">
-      <div class="timezone" id="timezone">Asia/Seoul</div>
-      <div class="message" id="message">좋은 하루 보내요 ✿</div>
     </div>
   </section>
 
@@ -221,26 +172,9 @@
     const secondsEl = document.getElementById("seconds");
     const ampmEl = document.getElementById("ampm");
     const timezoneEl = document.getElementById("timezone");
-    const messageEl = document.getElementById("message");
-
-    const messages = [
-      "좋은 하루 보내요 ✿",
-      "천천히, 예쁘게 기록해요",
-      "오늘도 차분하게 시작",
-      "작은 할 일부터 하나씩",
-      "민트처럼 산뜻한 하루"
-    ];
 
     function pad(n) {
       return String(n).padStart(2, "0");
-    }
-
-    function getGreeting(hour) {
-      if (hour < 6) return "새벽";
-      if (hour < 12) return "아침";
-      if (hour < 18) return "오후";
-      if (hour < 22) return "저녁";
-      return "오늘도 수고했어요";
     }
 
     function updateClock() {
@@ -261,12 +195,8 @@
       timeEl.textContent = `${pad(hour)}:${pad(minute)}`;
       secondsEl.textContent = pad(second);
       ampmEl.textContent = hour < 12 ? "AM" : "PM";
-
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Local Time";
-      timezoneEl.textContent = tz;
-
-      const index = Math.floor(now.getMinutes() / 12) % messages.length;
-      messageEl.textContent = `${getGreeting(hour)} · ${messages[index]}`;
+      timezoneEl.textContent =
+        Intl.DateTimeFormat().resolvedOptions().timeZone || "Local Time";
     }
 
     updateClock();
